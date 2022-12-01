@@ -1,20 +1,20 @@
-export const fetchImages = name => {
+export const fetchImages = async(inputValue, pageNr) => {
   const options = {
     headers: {
       key: '31733300-b569f31f89a42522564474d93',
     },
   };
-  const url = `https://pixabay.com/api/everithing?q=${name}&image_type=photo&orientation=horizontal&safesearch=true`;
+  const url = `https://pixabay.com/api/?key=${options.headers.key}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNr}`;
 
-  return fetch(url, options)
-  .then(r => {
+  return await fetch(url)
+  .then(async r => {
     if (!r.ok) {
         if (r.status === 404) {
             return [];
         }
         throw new Error(r.status);
     }
-    return r.json();
+    return await r.json();
   })
   .catch(error => {
     console.error(error);
