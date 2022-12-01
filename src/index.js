@@ -52,7 +52,7 @@ function renderImages(images) {
     const markup = images.map(image => {
         return `
         <div class="photo-card">
-            <a href="${image.largeImageUrl}">
+            <a href="${image.largeImageURL}">
                 <img src="${image.webformatURL}" alt="${image.tags}" title="${image.tags}" loading="lazy" />
             </a>
             <div class="info">
