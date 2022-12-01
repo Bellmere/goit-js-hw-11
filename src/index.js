@@ -33,7 +33,8 @@ function onSearchBtn(e) {
     }
 };
 
-function onLoadMore() {
+function onLoadMore(e) {
+    e.preventDefault();
     pageNumber += 1;
     const trimmedValue = refs.searchInput.value.trim();
     refs.loadMore.style.display = 'none';
@@ -44,6 +45,7 @@ function onLoadMore() {
             renderImages(r.hits);
             Notiflix.Notify.success(`Hooray! We found ${r.totalHits} images.`);
             refs.loadMore.style.display = 'block';
+            galleryLightBox.refresh();
         }
     });
 };
