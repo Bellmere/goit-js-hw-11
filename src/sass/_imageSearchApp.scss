@@ -112,3 +112,13 @@ body {
     border-radius: 2px;
     cursor: pointer;
   }
+
+  .photo-card {
+    width: 350px;
+  }
+
+  .photo-card a img {
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+  }

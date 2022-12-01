@@ -73,7 +73,7 @@ function renderImages(images) {
         </div>
         `
     }).join('');
-    refs.galleryEl.innerHTML += markup;
+    refs.galleryEl.insertAdjacentHTML('beforeend', markup);
 }
 
 function cleanGallery() {
