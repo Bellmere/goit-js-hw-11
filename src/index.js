@@ -3,6 +3,7 @@ import Notiflix from 'notiflix';
 import { fetchImages } from './js/fetcImages';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import throttle from 'lodash.throttle';
 
 const refs = getRefs();
 let pageNumber = 1;
@@ -12,7 +13,8 @@ let trimmedValue = '';
 refs.loadMore.style.display = 'none';
 
 refs.searchBtn.addEventListener('click', onSearchBtn);
-refs.loadMore.addEventListener('click', onLoadMore);
+window.addEventListener('scroll', throttle(infinityScroll, 300));
+window.addEventListener('resize', throttle(infinityScroll, 300));
 
 function onSearchBtn(e) {
     e.preventDefault();
@@ -27,26 +29,37 @@ function onSearchBtn(e) {
     }
 };
 
-function onLoadMore(e) {
-    e.preventDefault();
-    pageNumber += 1;
-    refs.loadMore.style.display = 'none';
-    onClickRenderImages();
-};
-
 function onClickRenderImages() {
     fetchImages(trimmedValue, pageNumber).then(r => {
         if (r.data.totalHits === 0) {
             Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+        } 
+        else if (r.data.hits.length === 0) {
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         }
         else {
             renderImages(r.data.hits);
             Notiflix.Notify.success(`Hooray! We found ${r.data.totalHits} images.`);
-            refs.loadMore.style.display = 'block';
             galleryLightBox.refresh();
         }
     });
 };
+
+async function infinityScroll(e) {
+    const height = document.body.offsetHeight;
+    const screenHeight = window.innerHeight;
+    const scrolled = window.scrollY;
+    const threshold = height - screenHeight / 4;
+    const position = scrolled + screenHeight;
+
+    if (trimmedValue && position >= threshold - 500) {
+        console.log(position);
+        console.log(threshold);
+        pageNumber += 1;
+        await onClickRenderImages();
+     } 
+}
+
 
 function renderImages(images) {
     const markup = images.map(image => {
@@ -79,4 +92,5 @@ function cleanGallery() {
     refs.galleryEl.innerHTML = '';
     pageNumber = 1;
     refs.loadMore.style.display = 'none';
-  }
+  };
+  

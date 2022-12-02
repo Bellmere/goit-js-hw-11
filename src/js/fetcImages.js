@@ -25,18 +25,3 @@ export const fetchImages = async(inputValue, pageNr) => {
     }
   })
 };
-
-
-// return await fetch(url)
-//   .then(async r => {
-//     if (!r.ok) {
-//         if (r.status === 404) {
-//             return [];
-//         }
-//         throw new Error(r.status);
-//     }
-//     return await r.json();
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   });
