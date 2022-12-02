@@ -6,6 +6,12 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import throttle from 'lodash.throttle';
 
 const refs = getRefs();
+refs.searchBar.style.cssText = `
+    position: sticky;
+    top: 0;
+    z-index: 999;
+`;
+
 let pageNumber = 1;
 let galleryLightBox = new SimpleLightbox('.gallery a');
 let trimmedValue = '';
