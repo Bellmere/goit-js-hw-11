@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const fetchImages = async(inputValue, pageNr) => {
   const options = {
     headers: {
@@ -6,17 +8,35 @@ export const fetchImages = async(inputValue, pageNr) => {
   };
   const url = `https://pixabay.com/api/?key=${options.headers.key}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNr}`;
 
-  return await fetch(url)
+  return await axios.get(url)
   .then(async r => {
-    if (!r.ok) {
-        if (r.status === 404) {
-            return [];
-        }
-        throw new Error(r.status);
-    }
-    return await r.json();
+    console.log(r);
+    return await r;
   })
-  .catch(error => {
-    console.error(error);
-  });
+  .catch((error) => {
+    if (error.r) {
+      console.log(error.r.data);
+      console.log(error.r.status);
+      console.log(error.r.headers);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log(error.message);
+    }
+  })
 };
+
+
+// return await fetch(url)
+//   .then(async r => {
+//     if (!r.ok) {
+//         if (r.status === 404) {
+//             return [];
+//         }
+//         throw new Error(r.status);
+//     }
+//     return await r.json();
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });

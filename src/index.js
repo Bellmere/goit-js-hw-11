@@ -36,13 +36,12 @@ function onLoadMore(e) {
 
 function onClickRenderImages() {
     fetchImages(trimmedValue, pageNumber).then(r => {
-        if (r.length === 0) {
+        if (r.data.totalHits === 0) {
             Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         }
         else {
-            renderImages(r.hits);
-            Notiflix.Notify.success(`Hooray! We found ${r.totalHits} images.`);
-            console.log(r.totalHits);
+            renderImages(r.data.hits);
+            Notiflix.Notify.success(`Hooray! We found ${r.data.totalHits} images.`);
             refs.loadMore.style.display = 'block';
             galleryLightBox.refresh();
         }
