@@ -23,7 +23,7 @@ function onSearchBtn(e) {
         onClickRenderImages();
     }
     else {
-        Notiflix.Notify.failure('Field must be filled!');
+       return Notiflix.Notify.failure('Field must be filled!');
     }
 };
 
@@ -81,5 +81,3 @@ function cleanGallery() {
     pageNumber = 1;
     refs.loadMore.style.display = 'none';
   }
-
-console.log(refs)
