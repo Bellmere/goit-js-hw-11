@@ -97,5 +97,4 @@ function renderImages(images) {
 function cleanGallery() {
   refs.galleryEl.innerHTML = '';
   pageNumber = 1;
-  refs.loadMore.style.display = 'none';
 }
