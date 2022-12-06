@@ -16,11 +16,16 @@ let pageNumber = 1;
 let galleryLightBox = new SimpleLightbox('.gallery a');
 let trimmedValue = '';
 
+const options = {
+  rootMargin: '150px',
+};
+
 refs.loadMore.style.display = 'none';
+const observer = new IntersectionObserver(onEntry, options);
 
 refs.searchBtn.addEventListener('click', throttle(onSearchBtn, 300));
-window.addEventListener('scroll', throttle(infinityScroll, 600));
-window.addEventListener('resize', throttle(infinityScroll, 600));
+// window.addEventListener('scroll', throttle(infinityScroll, 600));
+// window.addEventListener('resize', throttle(infinityScroll, 600));
 
 function onSearchBtn(e) {
   e.preventDefault();
@@ -54,18 +59,29 @@ function onSearchBtn(e) {
   });
 }
 
-async function infinityScroll(e) {
-  const height = document.body.offsetHeight;
-  const screenHeight = window.innerHeight;
-  const scrolled = window.scrollY;
-  const threshold = height - screenHeight / 4;
-  const position = scrolled + screenHeight;
+// async function infinityScroll(e) {
+//   const height = document.body.offsetHeight;
+//   const screenHeight = window.innerHeight;
+//   const scrolled = window.scrollY;
+//   const threshold = height - screenHeight / 4;
+//   const position = scrolled + screenHeight;
 
-  if (trimmedValue && position >= threshold) {
+//   if (trimmedValue && position >= threshold) {
+//       pageNumber += 1;
+//       await onClickRenderImages();
+//   }
+// }
+
+function onEntry(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && trimmedValue) {
       pageNumber += 1;
-      await onClickRenderImages();
-  }
+      onClickRenderImages();
+    };
+});
 }
+
+observer.observe(refs.sentinel);
 
  function renderImages(images) {
   const markup = images
