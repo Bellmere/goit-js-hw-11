@@ -6,7 +6,7 @@ export const fetchImages = async (inputValue, pageNr) => {
       key: '31733300-b569f31f89a42522564474d93',
     },
   };
-  const url = `https://pixabay.com/api/?key=${options.headers.key}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNr}`;
+  const url = `https://pixabay.com/api/?key=${options.headers.key}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`;
 
   return await axios
     .get(url)
