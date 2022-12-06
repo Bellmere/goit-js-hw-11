@@ -25,6 +25,7 @@ window.addEventListener('resize', throttle(infinityScroll, 300));
 async function onSearchBtn(e) {
   e.preventDefault();
   cleanGallery();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   trimmedValue = refs.searchInput.value.trim();
 
   if (trimmedValue) {
@@ -34,7 +35,7 @@ async function onSearchBtn(e) {
   }
 }
 
-function onClickRenderImages() {
+ function onClickRenderImages() {
   fetchImages(trimmedValue, pageNumber).then(r => {
     if (!r.data.totalHits) {
       Notiflix.Notify.failure(
@@ -65,7 +66,7 @@ async function infinityScroll(e) {
   }
 }
 
-function renderImages(images) {
+ function renderImages(images) {
   const markup = images
     .map(image => {
       return `
