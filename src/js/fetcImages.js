@@ -11,6 +11,7 @@ export const fetchImages = async (inputValue, pageNr) => {
   return await axios
     .get(url)
     .then(async r => {
+      console.log(pageNr);
       console.log(r);
       return await r;
     })

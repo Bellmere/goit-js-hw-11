@@ -15,6 +15,7 @@ refs.searchBar.style.cssText = `
 let pageNumber = 1;
 let galleryLightBox = new SimpleLightbox('.gallery a');
 let trimmedValue = '';
+let flag = false;
 
 const options = {
   rootMargin: '150px',
@@ -29,11 +30,11 @@ refs.searchBtn.addEventListener('click', throttle(onSearchBtn, 300));
 
 function onSearchBtn(e) {
   e.preventDefault();
-  // window.scrollTo({ top: 0, behavior: 'instant' });
-  trimmedValue = refs.searchInput.value.trim();
   cleanGallery();
+  flag = true;
+  trimmedValue = refs.searchInput.value.trim();
 
-  if (trimmedValue) {
+  if (trimmedValue && pageNumber === 1) {
     onClickRenderImages();
   } else {
     return Notiflix.Notify.failure('Field must be filled!');
@@ -51,30 +52,19 @@ function onSearchBtn(e) {
         "We're sorry, but you've reached the end of search results."
       );
     } else {
-      console.log(pageNumber);
+      // console.log(pageNumber);
       renderImages(r.data.hits);
       Notiflix.Notify.success(`Hooray! We found ${r.data.totalHits} images.`);
+      flag = false;
       galleryLightBox.refresh();
     }
   });
 }
 
-// async function infinityScroll(e) {
-//   const height = document.body.offsetHeight;
-//   const screenHeight = window.innerHeight;
-//   const scrolled = window.scrollY;
-//   const threshold = height - screenHeight / 4;
-//   const position = scrolled + screenHeight;
-
-//   if (trimmedValue && position >= threshold) {
-//       pageNumber += 1;
-//       await onClickRenderImages();
-//   }
-// }
-
 function onEntry(entries) {
   entries.forEach(entry => {
-    if (entry.isIntersecting && trimmedValue) {
+    if (entry.isIntersecting && trimmedValue && !flag) {
+      // window.scrollTo({ top: 0, behavior: 'instant' });
       pageNumber += 1;
       onClickRenderImages();
     };
