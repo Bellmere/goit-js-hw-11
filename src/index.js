@@ -19,17 +19,19 @@ let trimmedValue = '';
 refs.loadMore.style.display = 'none';
 
 refs.searchBtn.addEventListener('click', throttle(onSearchBtn, 300));
-window.addEventListener('scroll', throttle(infinityScroll, 300));
-window.addEventListener('resize', throttle(infinityScroll, 300));
+// window.addEventListener('scroll', throttle(infinityScroll, 600));
+// window.addEventListener('resize', throttle(infinityScroll, 600));
 
 async function onSearchBtn(e) {
   e.preventDefault();
   cleanGallery();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // window.scrollTo({ top: 0, behavior: 'instant' });
+  window.removeEventListener('scroll', throttle(infinityScroll, 600));
   trimmedValue = refs.searchInput.value.trim();
 
   if (trimmedValue) {
     await onClickRenderImages();
+    window.addEventListener('scroll', throttle(infinityScroll, 600));
   } else {
     return Notiflix.Notify.failure('Field must be filled!');
   }
@@ -45,7 +47,9 @@ async function onSearchBtn(e) {
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
       );
-    } else {
+    } else if (pageNumber === 1) {
+      console.log('loh');
+      r.data.hits.value === 40;
       renderImages(r.data.hits);
       Notiflix.Notify.success(`Hooray! We found ${r.data.totalHits} images.`);
       galleryLightBox.refresh();
@@ -60,9 +64,21 @@ async function infinityScroll(e) {
   const threshold = height - screenHeight / 4;
   const position = scrolled + screenHeight;
 
-  if (trimmedValue && position >= threshold - 500) {
+  if (trimmedValue && position >= threshold && !infinityScroll.fix) {
+    if (refs.searchBtn.addEventListener('click')) {
+        pageNumber = 1;
+    } else {
+      infinityScroll.fix = 1;
+      pageNumber += 1;
+      await onClickRenderImages();
+      infinityScroll.fix = 0;
+    }
+
+    infinityScroll.fix = 1;
     pageNumber += 1;
+    console.log(pageNumber);
     await onClickRenderImages();
+    infinityScroll.fix = 0;
   }
 }
 
@@ -97,5 +113,5 @@ async function infinityScroll(e) {
 
 function cleanGallery() {
   refs.galleryEl.innerHTML = '';
-  pageNumber === 1;
+  pageNumber = 1;
 }
