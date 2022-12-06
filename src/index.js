@@ -61,7 +61,7 @@ async function infinityScroll(e) {
   const position = scrolled + screenHeight;
 
   if (trimmedValue && position >= threshold - 500) {
-    throttle(pageNumber += 1, 300);
+    pageNumber += 1;
     await onClickRenderImages();
   }
 }
