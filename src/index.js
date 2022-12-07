@@ -22,21 +22,23 @@ const options = {
 };
 
 refs.loadMore.style.display = 'none';
+refs.sentinelText.classList.add('is-hidden');
+console.log(refs.sentinel);
 const observer = new IntersectionObserver(onEntry, options);
 
 refs.searchBtn.addEventListener('click', throttle(onSearchBtn, 300));
-// window.addEventListener('scroll', throttle(infinityScroll, 600));
-// window.addEventListener('resize', throttle(infinityScroll, 600));
 
 function onSearchBtn(e) {
   e.preventDefault();
   cleanGallery();
+  refs.sentinelText.classList.add('is-hidden');
   flag = true;
   trimmedValue = refs.searchInput.value.trim();
 
   if (trimmedValue && pageNumber === 1) {
     onClickRenderImages();
-  } else {
+  } 
+  else {
     return Notiflix.Notify.failure('Field must be filled!');
   }
 }
@@ -51,12 +53,16 @@ function onSearchBtn(e) {
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
       );
-    } else {
-      // console.log(pageNumber);
+    } 
+     else {
       renderImages(r.data.hits);
       Notiflix.Notify.success(`Hooray! We found ${r.data.totalHits} images.`);
       flag = false;
       galleryLightBox.refresh();
+      if (r.data.hits.length < 40) {
+        flag = true;
+        refs.sentinelText.classList.remove('is-hidden');
+      }
     }
   });
 }
@@ -64,7 +70,6 @@ function onSearchBtn(e) {
 function onEntry(entries) {
   entries.forEach(entry => {
     if (entry.isIntersecting && trimmedValue && !flag) {
-      // window.scrollTo({ top: 0, behavior: 'instant' });
       pageNumber += 1;
       onClickRenderImages();
     };

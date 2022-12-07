@@ -136,3 +136,14 @@ body {
   object-fit: cover;
   aspect-ratio: 1/1;
 }
+
+.sentinel__text {
+  text-align: center;
+  color: #4056b4;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.is-hidden {
+  display: none;
+}

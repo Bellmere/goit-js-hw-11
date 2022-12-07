@@ -7,5 +7,6 @@ export default function getRefs() {
     galleryEl: document.querySelector('.gallery'),
     loadMore: document.querySelector('.load-more'),
     sentinel: document.querySelector('#sentinel'),
+    sentinelText: document.querySelector('.sentinel__text'),
   };
 }
